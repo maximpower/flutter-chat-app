@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
       title: 'Chat App',
       debugShowCheckedModeBanner: false,
       routes: appRoutes,
-      initialRoute: 'login',
+      initialRoute: 'chat',
       );
   }
 }
