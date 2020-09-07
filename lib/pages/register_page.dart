@@ -1,9 +1,12 @@
+import 'package:chat/helpers/mostrar_alerta.dart';
 import 'package:chat/widgets/blue_button.dart';
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
 import 'package:chat/widgets/custom_input.dart';
 import 'package:chat/widgets/custom_label.dart';
 import 'package:chat/widgets/login_register_logo.dart';
+import 'package:chat/services/auth_service.dart';
 
 
 class RegisterPage extends StatelessWidget {
@@ -67,6 +70,9 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+
+    AuthService authService = Provider.of<AuthService>( context );
+
     return Container(
       margin: EdgeInsets.only(top:40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -97,8 +103,23 @@ class __FormState extends State<_Form> {
           //TODO: Crear botón
             
           BlueButton(
-            textButton: 'Login',
-            onPressed: null,
+            textButton: 'Register',
+            onPressed: authService.registering 
+            ? null
+            : () async {
+
+              FocusScope.of(context).unfocus();
+
+              final registerOk = await authService.register(nameController.text.trim(), emailController.text.trim(), passwordController.text.trim());
+
+              if( registerOk == true ){
+                // Conexión socket server.
+                Navigator.pushReplacementNamed(context, 'users');
+              }else{
+                showAlert(context, 'Error en el registro', registerOk['msg']);
+              }
+
+            },
           )
 
          ],
